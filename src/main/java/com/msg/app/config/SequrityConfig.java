@@ -37,7 +37,9 @@ public class SequrityConfig {
                         )
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                )
+
+        ;
         return http.build();
     }
 
