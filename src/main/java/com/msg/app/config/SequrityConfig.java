@@ -36,10 +36,13 @@ public class SequrityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)throws Exception {
         http
+
+                //token을 사용하는 방식 csrf는 disable
                 .csrf(AbstractHttpConfigurer::disable)
+                //HttpServletRequest를 사용하는 요청들에 대한 접근제한
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/login").permitAll()
-                                .requestMatchers("msg/**").permitAll()
+                        .requestMatchers("/api/login").permitAll() //로그인
+                        .requestMatchers("/api/update").permitAll() //로그인
                 )
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling.accessDeniedHandler(jwtAccessDeniedHandler)

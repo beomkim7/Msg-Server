@@ -11,6 +11,7 @@ public class UserDTO {
     private String name;
     private String email;
     private Boolean enabled;
+    private int roleId;
 
     private List<RoleDTO> roleVOS;
 

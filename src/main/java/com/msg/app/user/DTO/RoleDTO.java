@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class RoleDTO {
-    private Long roleId;
+    private Long id;
     private String roleName;
 
 }
