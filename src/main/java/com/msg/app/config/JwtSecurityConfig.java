@@ -1,5 +1,7 @@
-package com.msg.app.JwtToneken;
+package com.msg.app.config;
 
+import com.msg.app.JwtToneken.JwtFilter;
+import com.msg.app.JwtToneken.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -1,2 +1,48 @@
-package com.msg.app.JwtToneken;public class JwtFilter {
+package com.msg.app.JwtToneken;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
+
+import java.io.IOException;
+
+@RequiredArgsConstructor
+public class JwtFilter extends GenericFilter {
+    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
+    public static  final String AUTHORIZATION_HEADER = "Authorization";
+    private  final TokenProvider tokenProvider;
+
+    //실제 필터링 로직
+    //토큰의 인증정보 SecurityContext에 저장하는 역활
+
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        String jwt = resolveToken(httpServletRequest);
+        String requestURI = httpServletRequest.getRequestURI();
+
+        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            Authentication authentication = tokenProvider.getauAuthentication(jwt);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            logger.debug("security context에 '{}' 인증정보를 저장했습니다., urt : {}", authentication.getName(), requestURI);
+        }else {
+            logger.debug("유효한 JWT 토큰이 없습니다, uri : {}", requestURI);
+        }
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
 }

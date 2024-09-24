@@ -1,9 +1,14 @@
+/*
 package com.msg.app.JwtToneken;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,9 +24,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+*/
 /**
  * 지정한 URL별 JWT의 유효성 검증을 수행하며 직접적인 사용자 인증을 확인합니다.
- */
+ *//*
+
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -120,9 +127,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     }
 
 
-    /**
+    */
+/**
      * 토큰 관련 Exception 발생 시 예외 응답값 구성
-     */
+     *//*
+
     private JSONObject jsonResponseWrapper(Exception e) {
 
         String resultMessage = "";
@@ -153,4 +162,4 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         return jsonObject;
     }
 
-}
+}*/

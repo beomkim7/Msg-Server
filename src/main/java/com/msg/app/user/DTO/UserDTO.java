@@ -1,21 +1,18 @@
-package com.msg.app.user;
+package com.msg.app.user.DTO;
 
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.List;
 
 @Data
-public class userVO  {
+public class UserDTO {
     private String id;
     private String pw;
     private String name;
     private String email;
     private Boolean enabled;
 
-    private List<RoleVO> roleVOS;
+    private List<RoleDTO> roleVOS;
 
 
 }

@@ -1,10 +1,9 @@
-package com.msg.app.user;
+package com.msg.app.user.DTO;
 
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
 
 @Data
-public class RoleVO {
+public class RoleDTO {
     private Long roleId;
     private String roleName;
 

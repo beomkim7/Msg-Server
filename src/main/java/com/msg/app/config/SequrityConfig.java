@@ -1,6 +1,9 @@
 package com.msg.app.config;
 
 
+import com.msg.app.JwtToneken.JwtAccessDeniedHandler;
+import com.msg.app.JwtToneken.JwtAuthenticationEntryPoint;
+import com.msg.app.JwtToneken.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +19,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SequrityConfig {
+
+    private final TokenProvider tokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -40,6 +47,7 @@ public class SequrityConfig {
                 )
 
         ;
+
         return http.build();
     }
 
