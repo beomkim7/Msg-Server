@@ -24,17 +24,21 @@ public class SequrityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
+
+
     @Bean
     public PasswordEncoder passwordEncoder(){
+
         return new BCryptPasswordEncoder();
     }
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)throws Exception {
-        http.cors(AbstractHttpConfigurer::disable)
+        http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/login").permitAll()
                                 .requestMatchers("msg/**").permitAll()
                 )
                 .exceptionHandling((exceptionHandling) ->
@@ -44,9 +48,11 @@ public class SequrityConfig {
                         )
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                );
 
-        ;
+        new JwtSecurityConfig(tokenProvider).configure(http);
+
+
 
         return http.build();
     }
