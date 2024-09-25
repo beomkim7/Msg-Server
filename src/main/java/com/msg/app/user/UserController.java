@@ -28,10 +28,10 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> logIn(@RequestBody UserDTO userDTO)throws Exception{
+    public ResponseEntity<TokenDTO> logIn(@RequestBody UserDTO userDTO)throws Exception {
 //        userService.updatePasswords();
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userDTO.getId(),userDTO.getPw());
+                new UsernamePasswordAuthenticationToken(userDTO.getId(), userDTO.getPw());
 
         // authenticate 메서드가 실행될때 UserService class 의 loadUserByUsername 메서드 실행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -45,11 +45,7 @@ public class UserController {
 //        headers.add("Authorization", "Bearer " + token);
         headers.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token);
         //tokendto를 이용해 response body에도 넣어서 리턴
-        return new ResponseEntity<>(new TokenDTO(token),headers, HttpStatus.OK);
+        return new ResponseEntity<>(new TokenDTO(token), headers, HttpStatus.OK);
 
-    }
-    @PostMapping("/update")
-    public void updatepass(@RequestBody UserDTO userDTO)throws Exception{
-        userService.updatePasswords();
     }
 }

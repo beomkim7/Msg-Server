@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 
 @Component("userDetailsService")
 public class UserService implements UserDetailsService {
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserMapper userMapper;
@@ -64,12 +62,5 @@ public class UserService implements UserDetailsService {
         return new User(userDTO.getId(), userDTO.getPw(), authorities); // 비밀번호 암호화 고려 필요
     }
 
-    public void updatePasswords() throws  Exception{
-        List<UserDTO> users = userMapper.getAllUsers(); // 모든 사용자 정보를 가져오는 메서드
-        for (UserDTO user : users) {
-            String encodedPassword = passwordEncoder.encode(user.getPw()); // 비밀번호를 인코딩
-            user.setPw(encodedPassword); // 인코딩된 비밀번호를 설정
-            userMapper.updateUser(user); // 데이터베이스에 사용자 정보를 업데이트
-        }
-    }
+
 }
