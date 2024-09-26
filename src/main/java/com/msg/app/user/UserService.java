@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String id) {
         try {
-            Optional<UserDTO> optional = userMapper.getUserById(id);
+            Optional<UserDTO> optional = userMapper.login(id);
             UserDTO userDTO = optional
                     .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + id));
             return createUser(userDTO);

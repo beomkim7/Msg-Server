@@ -27,8 +27,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @PostMapping("/join")
+    public ResponseEntity<UserDTO> join(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userDTO);
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> logIn(@RequestBody UserDTO userDTO)throws Exception {
+    public ResponseEntity<TokenDTO> logIn(@RequestBody UserDTO userDTO) {
 //        userService.updatePasswords();
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDTO.getId(), userDTO.getPw());
