@@ -24,16 +24,27 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserLoginService userLoginService;
 
     @PostMapping("/join")
     public ResponseEntity<UserDTO> join(@RequestBody UserDTO userDTO)throws Exception {
         int result = userService.addUser(userDTO);
         return ResponseEntity.ok(result == 1 ? userDTO : null);
     }
+    //DB 비밀번호 인코딩안됐을때 로직
+//    @PutMapping("/pass")
+//    public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO)throws Exception {
+//
+//        int result = userLoginService.updatePassword(userDTO);
+//
+//        return ResponseEntity.ok(result == 1 ? userDTO : null);
+//    }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDTO> logIn(@RequestBody UserDTO userDTO) {
-//        userService.updatePasswords();
+    public ResponseEntity<TokenDTO> logIn(@RequestBody UserDTO userDTO)throws Exception {
+
+
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDTO.getId(), userDTO.getPw());
 

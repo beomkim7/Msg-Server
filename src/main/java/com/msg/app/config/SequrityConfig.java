@@ -43,6 +43,7 @@ public class SequrityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/login").permitAll() //로그인
                         .requestMatchers("/api/join").permitAll() //회원가입
+                        .requestMatchers("/api/pass").permitAll() //회원가입
                 )
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling.accessDeniedHandler(jwtAccessDeniedHandler)

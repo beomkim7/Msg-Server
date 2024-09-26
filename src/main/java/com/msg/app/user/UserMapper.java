@@ -4,6 +4,7 @@ import com.msg.app.user.DTO.UserDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
@@ -12,6 +13,8 @@ public interface UserMapper {
 
     public Optional<UserDTO> login(String id)throws Exception;
     public int addUser(UserDTO user)throws Exception;
+    public UserDTO findUserById(String id)throws Exception;
+    public int updateUser(UserDTO userDTO)throws Exception;
 
 
 }

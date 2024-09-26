@@ -10,7 +10,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +24,14 @@ public class UserLoginService implements UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(UserLoginService.class);
     private final UserMapper userMapper;
-
-    @Autowired
-    public UserLoginService(final UserMapper userMapper) {
+    private final PasswordEncoder passwordEncoder;
+    public UserLoginService(final UserMapper userMapper, final PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
     @Override
     public UserDetails loadUserByUsername(String id) {
+
         try {
             Optional<UserDTO> optional = userMapper.login(id);
             UserDTO userDTO = optional
@@ -61,6 +64,21 @@ public class UserLoginService implements UserDetailsService {
     }
 
 
+    //DB 비밀번호 인코딩안됐을때 로직
+//    public int updatePassword(UserDTO userDTO) throws Exception {
+//        UserDTO existingUser = userMapper.findUserById(userDTO.getId());
+//
+//        // 비밀번호가 암호화되지 않은 경우에만 업데이트
+//        if (existingUser != null && !ispassword(existingUser.getPw())) {
+//            existingUser.setPw(passwordEncoder.encode(userDTO.getPw())); // 비밀번호 암호화
+//            userMapper.updateUser(existingUser); // 데이터베이스 업데이트
+//        }
+//        return userMapper.updateUser(existingUser);
+//    }
+
+    private boolean ispassword(String password) {
+        return password!=null && password.length() == 60;
+    }
 
 
 }

@@ -19,4 +19,14 @@
         values(#{id},#{pw},#{name},#{email},1,2)
     </insert>
 
+    <select id="findUserById" resultType="userDTO">
+        select * from user
+        where id = #{id}
+    </select>
+
+    <update id="updateUser" parameterType="userDTO">
+        update user set pw=#{pw} where id=#{id}
+
+    </update>
+
 </mapper>
