@@ -15,8 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -28,8 +26,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/join")
-    public ResponseEntity<UserDTO> join(@RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(userDTO);
+    public ResponseEntity<UserDTO> join(@RequestBody UserDTO userDTO)throws Exception {
+        int result = userService.addUser(userDTO);
+        return ResponseEntity.ok(result == 1 ? userDTO : null);
     }
 
     @PostMapping("/login")

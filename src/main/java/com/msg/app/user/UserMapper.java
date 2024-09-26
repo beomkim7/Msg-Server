@@ -11,7 +11,7 @@ public interface UserMapper {
 
 
     public Optional<UserDTO> login(String id)throws Exception;
-
+    public int addUser(UserDTO user)throws Exception;
 
 
 }
