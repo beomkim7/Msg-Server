@@ -62,26 +62,11 @@ public class UserLoginService implements UserDetailsService {
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
                 .collect(Collectors.toList());
 
-
         return new User(userDTO.getId(), userDTO.getPw(), authorities); // 비밀번호 암호화 고려 필요
     }
 
 
-    //DB 비밀번호 인코딩안됐을때 로직
-//    public int updatePassword(UserDTO userDTO) throws Exception {
-//        UserDTO existingUser = userMapper.findUserById(userDTO.getId());
-//
-//        // 비밀번호가 암호화되지 않은 경우에만 업데이트
-//        if (existingUser != null && !ispassword(existingUser.getPw())) {
-//            existingUser.setPw(passwordEncoder.encode(userDTO.getPw())); // 비밀번호 암호화
-//            userMapper.updateUser(existingUser); // 데이터베이스 업데이트
-//        }
-//        return userMapper.updateUser(existingUser);
-//    }
 
-    private boolean ispassword(String password) {
-        return password!=null && password.length() == 60;
-    }
 
 
 }

@@ -54,6 +54,7 @@ public class SequrityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
+
         new JwtSecurityConfig(tokenProvider).configure(http);
 
 

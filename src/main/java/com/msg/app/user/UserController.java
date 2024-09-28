@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public ResponseEntity<UserDTO> update(@AuthenticationPrincipal Authentication user, @RequestBody UserDTO userDTO)throws Exception {
+    public ResponseEntity<UserDTO> update(@AuthenticationPrincipal UserDetails user, @RequestBody UserDTO userDTO)throws Exception {
         if(user == null) {
             throw new Exception("로그인이 필요합니다.");
         }
@@ -67,11 +68,11 @@ public class UserController {
 
     }
 
-    //DB 비밀번호 인코딩안됐을때 로직
+//    //DB 비밀번호 인코딩안됐을때 로직
 //    @PutMapping("/pass")
 //    public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO)throws Exception {
 //
-//        int result = userLoginService.updatePassword(userDTO);
+//        int result = userService.updatePassword(userDTO);
 //
 //        return ResponseEntity.ok(result == 1 ? userDTO : null);
 //    }
