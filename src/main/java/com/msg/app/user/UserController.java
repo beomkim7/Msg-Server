@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,14 +33,16 @@ public class UserController {
         int result = userService.addUser(userDTO);
         return ResponseEntity.ok(result == 1 ? userDTO : null);
     }
-    //DB 비밀번호 인코딩안됐을때 로직
-//    @PutMapping("/pass")
-//    public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO)throws Exception {
-//
-//        int result = userLoginService.updatePassword(userDTO);
-//
-//        return ResponseEntity.ok(result == 1 ? userDTO : null);
-//    }
+
+    @PutMapping("/users")
+    public ResponseEntity<UserDTO> update(@AuthenticationPrincipal Authentication user, @RequestBody UserDTO userDTO)throws Exception {
+        if(user == null) {
+            throw new Exception("로그인이 필요합니다.");
+        }
+        userDTO = userService.changeName(userDTO);
+
+        return ResponseEntity.ok(userDTO);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> logIn(@RequestBody UserDTO userDTO)throws Exception {
@@ -63,4 +66,14 @@ public class UserController {
         return new ResponseEntity<>(new TokenDTO(token), headers, HttpStatus.OK);
 
     }
+
+    //DB 비밀번호 인코딩안됐을때 로직
+//    @PutMapping("/pass")
+//    public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO)throws Exception {
+//
+//        int result = userLoginService.updatePassword(userDTO);
+//
+//        return ResponseEntity.ok(result == 1 ? userDTO : null);
+//    }
+
 }

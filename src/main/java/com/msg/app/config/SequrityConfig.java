@@ -41,9 +41,9 @@ public class SequrityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 //HttpServletRequest를 사용하는 요청들에 대한 접근제한
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/login").permitAll() //로그인
-                        .requestMatchers("/api/join").permitAll() //회원가입
-                        .requestMatchers("/api/pass").permitAll() //회원가입
+//                        .requestMatchers("/api/login").permitAll() //로그인
+//                        .requestMatchers("/api/join").permitAll() //회원가입
+                        .requestMatchers("/api/**").permitAll() //api 밑에 모든경로 허용 익셉션 적용
                 )
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling.accessDeniedHandler(jwtAccessDeniedHandler)

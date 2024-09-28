@@ -1,6 +1,7 @@
 package com.msg.app.user;
 
 import com.msg.app.user.DTO.UserDTO;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +21,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component("userDetailsService")
+@RequiredArgsConstructor
 public class UserLoginService implements UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(UserLoginService.class);
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-    public UserLoginService(final UserMapper userMapper, final PasswordEncoder passwordEncoder) {
-        this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
-    }
+
+//    public UserLoginService(final UserMapper userMapper, final PasswordEncoder passwordEncoder) {
+//        this.userMapper = userMapper;
+//        this.passwordEncoder = passwordEncoder;
+//    }
     @Override
     public UserDetails loadUserByUsername(String id) {
 
