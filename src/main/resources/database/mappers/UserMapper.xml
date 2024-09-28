@@ -26,7 +26,10 @@
 
     <update id="updateUser" parameterType="userDTO">
         update user set pw=#{pw} where id=#{id}
+    </update>
 
+    <update id="changeName" parameterType="userDTO">
+        update user set name=#{name} where id=#{id}
     </update>
 
 </mapper>

@@ -5,6 +5,8 @@ import com.msg.app.JwtToneken.TokenProvider;
 import com.msg.app.user.DTO.TokenDTO;
 import com.msg.app.user.DTO.UserDTO;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,13 +19,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
-
+    private static  final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
     @Autowired
@@ -36,11 +40,13 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public ResponseEntity<UserDTO> update(@AuthenticationPrincipal UserDetails user, @RequestBody UserDTO userDTO)throws Exception {
+    public ResponseEntity<UserDTO> update(@AuthenticationPrincipal UserDTO user, @RequestBody UserDTO userDTO)throws Exception {
+        logger.info(user+"김범서");
         if(user == null) {
             throw new Exception("로그인이 필요합니다.");
         }
-        userDTO = userService.changeName(userDTO);
+
+        userDTO = userService.changeName(user);
 
         return ResponseEntity.ok(userDTO);
     }
@@ -65,7 +71,6 @@ public class UserController {
         headers.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token);
         //tokendto를 이용해 response body에도 넣어서 리턴
         return new ResponseEntity<>(new TokenDTO(token), headers, HttpStatus.OK);
-
     }
 
 //    //DB 비밀번호 인코딩안됐을때 로직
