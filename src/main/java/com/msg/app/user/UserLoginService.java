@@ -39,7 +39,8 @@ public class UserLoginService implements UserDetailsService {
             Optional<UserDTO> optional = userMapper.login(id);
             UserDTO userDTO = optional
                     .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + id));
-            return createUser(userDTO);
+            System.out.println(userDTO+"dto 저장");
+            return userDTO;
         } catch (UsernameNotFoundException e) {
             log.error("사용자를 찾을 수 없다: {}", e.getMessage());
             throw e;
@@ -48,21 +49,21 @@ public class UserLoginService implements UserDetailsService {
             throw new RuntimeException("사용자 로드 중 오류 발생", e);
         }
     }
-
-    public User createUser(UserDTO userDTO) {
-        if (!userDTO.getEnabled()) {
-            throw new UsernameNotFoundException(userDTO.getId() + "가 비활성화 상태입니다.");
-        }
-        if (userDTO.getRoleVOs() == null) {
-            userDTO.setRoleVOs(new ArrayList<>()); // 빈 리스트로 초기화
-        }
-
-        List<GrantedAuthority> authorities = userDTO.getRoleVOs().stream()
-                .filter(role -> role.getRoleName() != null) // null 체크 추가
-                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
-                .collect(Collectors.toList());
-
-        return new User(userDTO.getId(), userDTO.getPw(), authorities); // 비밀번호 암호화 고려 필요
-    }
+//
+//    public User createUser(UserDTO userDTO) {
+//        if (!userDTO.getEnabled()) {
+//            throw new UsernameNotFoundException(userDTO.getId() + "가 비활성화 상태입니다.");
+//        }
+//        if (userDTO.getRoleVOs() == null) {
+//            userDTO.setRoleVOs(new ArrayList<>()); // 빈 리스트로 초기화
+//        }
+//
+//        List<GrantedAuthority> authorities = userDTO.getRoleVOs().stream()
+//                .filter(role -> role.getRoleName() != null) // null 체크 추가
+//                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+//                .collect(Collectors.toList());
+//
+//        return new User(userDTO.getId(), userDTO.getPw(), authorities); // 비밀번호 암호화 고려 필요
+//    }
 
 }

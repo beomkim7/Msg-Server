@@ -1,5 +1,6 @@
 package com.msg.app.JwtToneken;
 
+import com.msg.app.user.DTO.UserDTO;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -47,12 +48,15 @@ public class TokenProvider implements InitializingBean {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-
+        UserDTO principal = (UserDTO) authentication.getPrincipal();
+        System.out.println(principal+"여기냐 ?");
         long now = (new Date()).getTime();
         Date expiration = new Date(now + tokenValidityInMilliseconds);
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
+                .claim("name",principal.getName())
+                .claim("email",principal.getEmail())
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(expiration)
@@ -97,7 +101,9 @@ public class TokenProvider implements InitializingBean {
 
         // 주체(subject) 가져오기
         String subject = claims.getSubject();
-        User principal = new User(subject != null ? subject : "", "", authorities);
+        String name = claims.get("name", String.class);
+        String email = claims.get("email", String.class);
+        UserDTO principal = new UserDTO(subject, "", name, email, true, null, null);
 
         // UsernamePasswordAuthenticationToken 반환
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);

@@ -18,7 +18,7 @@ public class UserService {
         return userMapper.addUser(userDTO);
     }
 
-    public UserDTO changeName(UserDTO userDTO)throws Exception{
+    public int changeName(UserDTO userDTO)throws Exception{
         return userMapper.changeName(userDTO);
     }
 

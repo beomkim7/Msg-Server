@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TokenDTO {
+//    public UserRecord dto;
     public String token;
 }
 

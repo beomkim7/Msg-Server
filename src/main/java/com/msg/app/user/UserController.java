@@ -4,6 +4,7 @@ import com.msg.app.JwtToneken.JwtFilter;
 import com.msg.app.JwtToneken.TokenProvider;
 import com.msg.app.user.DTO.TokenDTO;
 import com.msg.app.user.DTO.UserDTO;
+import com.msg.app.user.DTO.UserRecord;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,21 +36,28 @@ public class UserController {
     private UserLoginService userLoginService;
 
     @PostMapping("/join")
-    public ResponseEntity<UserDTO> join(@RequestBody UserDTO userDTO)throws Exception {
+    public ResponseEntity<UserDTO> join(@RequestBody com.msg.app.user.DTO.UserDTO userDTO)throws Exception {
         int result = userService.addUser(userDTO);
         return ResponseEntity.ok(result == 1 ? userDTO : null);
     }
 
     @PutMapping("/users")
-    public ResponseEntity<UserDTO> update(@AuthenticationPrincipal User user, @RequestBody UserDTO userDTO)throws Exception {
+    public ResponseEntity<Integer> update(@AuthenticationPrincipal UserDTO user, @RequestBody UserDTO userDTO)throws Exception {
+        System.out.println(SecurityContextHolder.getContext().getAuthentication());
         logger.info(user+"김범서");
+        logger.info(userDTO+"김범서");
         if(user == null) {
             throw new Exception("로그인이 필요합니다.");
         }
+        
+        if(userDTO.getName()==null && userDTO.getEmail()==null) {
+            throw new Exception("이름 또는 이메일 확인");
+        }
 
+        userDTO.setId(user.getId());
+        int result = userService.changeName(userDTO);
 
-
-        return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/login")
@@ -63,6 +71,7 @@ public class UserController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         //해당 객체 SecurityContextHolder에 저장
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        System.out.println(authentication.getPrincipal().getClass().getName());
         // authentication 객체를 createToken 메서드를 통해서 JWT Token을 생성
         String token = tokenProvider.createToken(authentication);
 
@@ -70,8 +79,21 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
 //        headers.add("Authorization", "Bearer " + token);
         headers.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token);
+        UserDTO authenticatedUserDTO = (UserDTO) authentication.getPrincipal();
+        System.out.println(authenticatedUserDTO+"왜 아무것도안만들어 대체");
+        System.out.println(userDTO+"왜 아무것도안만들어 대체");
         //tokendto를 이용해 response body에도 넣어서 리턴
         return new ResponseEntity<>(new TokenDTO(token), headers, HttpStatus.OK);
+//          @AuthenticationPrincipal에 담길 정보는 토큰이 생성될때 해야된다 
+//          오늘 뻘짓 너무많이했네 TokenProvider 확인        
+//        return ResponseEntity.ok()
+//                .headers(headers)
+//                .body(new TokenDTO(UserRecord.of(
+//                        authenticatedUserDTO.getId(),
+//                        authenticatedUserDTO.getName(),
+//                        authenticatedUserDTO.getEmail()
+//                ),token
+//                ));
     }
 
 //    //DB 비밀번호 인코딩안됐을때 로직
