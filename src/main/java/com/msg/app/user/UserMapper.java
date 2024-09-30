@@ -2,9 +2,8 @@ package com.msg.app.user;
 
 import com.msg.app.user.DTO.UserDTO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
 
-import java.util.List;
+
 import java.util.Optional;
 
 @Mapper

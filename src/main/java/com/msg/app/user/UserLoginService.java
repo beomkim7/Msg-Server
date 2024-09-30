@@ -53,11 +53,11 @@ public class UserLoginService implements UserDetailsService {
         if (!userDTO.getEnabled()) {
             throw new UsernameNotFoundException(userDTO.getId() + "가 비활성화 상태입니다.");
         }
-        if (userDTO.getRoleVOS() == null) {
-            userDTO.setRoleVOS(new ArrayList<>()); // 빈 리스트로 초기화
+        if (userDTO.getRoleVOs() == null) {
+            userDTO.setRoleVOs(new ArrayList<>()); // 빈 리스트로 초기화
         }
 
-        List<GrantedAuthority> authorities = userDTO.getRoleVOS().stream()
+        List<GrantedAuthority> authorities = userDTO.getRoleVOs().stream()
                 .filter(role -> role.getRoleName() != null) // null 체크 추가
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
                 .collect(Collectors.toList());
