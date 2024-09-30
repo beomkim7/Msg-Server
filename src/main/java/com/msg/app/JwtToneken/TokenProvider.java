@@ -59,22 +59,6 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
-    public Authentication getauAuthentication(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-
-        User principal = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
-    }
-
 //    public Authentication getauAuthentication(String token) {
 //        Claims claims = Jwts.parserBuilder()
 //                .setSigningKey(key)
@@ -82,26 +66,42 @@ public class TokenProvider implements InitializingBean {
 //                .parseClaimsJws(token)
 //                .getBody();
 //
-//        // 권한을 가져올 때 null 체크
-//        Collection<? extends GrantedAuthority> authorities;
-//        String authoritiesString = claims.get(AUTHORITIES_KEY) != null ? claims.get(AUTHORITIES_KEY).toString() : "";
+//        Collection<? extends GrantedAuthority> authorities =
+//                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+//                        .map(SimpleGrantedAuthority::new)
+//                        .collect(Collectors.toList());
 //
-//        // 권한 정보가 없을 경우 기본값 설정
-//        if (authoritiesString.isEmpty()) {
-//            authorities = Collections.emptyList(); // 기본값으로 비어있는 권한 리스트를 설정
-//        } else {
-//            authorities = Arrays.stream(authoritiesString.split(","))
-//                    .map(SimpleGrantedAuthority::new)
-//                    .collect(Collectors.toList());
-//        }
-//
-//        // 주체(subject) 가져오기
-//        String subject = claims.getSubject();
-//        User principal = new User(subject != null ? subject : "", "", authorities);
-//
-//        // UsernamePasswordAuthenticationToken 반환
+//        User principal = new User(claims.getSubject(), "", authorities);
 //        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
 //    }
+
+    public Authentication getauAuthentication(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        // 권한을 가져올 때 null 체크
+        Collection<? extends GrantedAuthority> authorities;
+        String authoritiesString = claims.get(AUTHORITIES_KEY) != null ? claims.get(AUTHORITIES_KEY).toString() : "";
+
+        // 권한 정보가 없을 경우 기본값 설정
+        if (authoritiesString.isEmpty()) {
+            authorities = Collections.emptyList(); // 기본값으로 비어있는 권한 리스트를 설정
+        } else {
+            authorities = Arrays.stream(authoritiesString.split(","))
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+        }
+
+        // 주체(subject) 가져오기
+        String subject = claims.getSubject();
+        User principal = new User(subject != null ? subject : "", "", authorities);
+
+        // UsernamePasswordAuthenticationToken 반환
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
 
 
     public boolean validateToken(String token) {

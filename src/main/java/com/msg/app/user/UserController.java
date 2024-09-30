@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,13 +41,13 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public ResponseEntity<UserDTO> update(@AuthenticationPrincipal UserDTO user, @RequestBody UserDTO userDTO)throws Exception {
+    public ResponseEntity<UserDTO> update(@AuthenticationPrincipal User user, @RequestBody UserDTO userDTO)throws Exception {
         logger.info(user+"김범서");
         if(user == null) {
             throw new Exception("로그인이 필요합니다.");
         }
 
-        userDTO = userService.changeName(user);
+
 
         return ResponseEntity.ok(userDTO);
     }
