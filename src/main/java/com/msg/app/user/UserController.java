@@ -4,7 +4,6 @@ import com.msg.app.JwtToneken.JwtFilter;
 import com.msg.app.JwtToneken.TokenProvider;
 import com.msg.app.user.DTO.TokenDTO;
 import com.msg.app.user.DTO.UserDTO;
-import com.msg.app.user.DTO.UserRecord;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +16,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -45,15 +42,10 @@ public class UserController {
     public ResponseEntity<Integer> update(@AuthenticationPrincipal UserDTO user, @RequestBody UserDTO userDTO)throws Exception {
         System.out.println(SecurityContextHolder.getContext().getAuthentication());
         logger.info(user+"김범서");
-        logger.info(userDTO+"김범서");
+
         if(user == null) {
             throw new Exception("로그인이 필요합니다.");
         }
-        
-        if(userDTO.getName()==null && userDTO.getEmail()==null) {
-            throw new Exception("이름 또는 이메일 확인");
-        }
-
         userDTO.setId(user.getId());
         int result = userService.changeName(userDTO);
 
@@ -79,13 +71,10 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
 //        headers.add("Authorization", "Bearer " + token);
         headers.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token);
-        UserDTO authenticatedUserDTO = (UserDTO) authentication.getPrincipal();
-        System.out.println(authenticatedUserDTO+"왜 아무것도안만들어 대체");
-        System.out.println(userDTO+"왜 아무것도안만들어 대체");
         //tokendto를 이용해 response body에도 넣어서 리턴
         return new ResponseEntity<>(new TokenDTO(token), headers, HttpStatus.OK);
 //          @AuthenticationPrincipal에 담길 정보는 토큰이 생성될때 해야된다 
-//          오늘 뻘짓 너무많이했네 TokenProvider 확인        
+//          오늘 뻘짓 너무많이했네 TokenProvider 확인
 //        return ResponseEntity.ok()
 //                .headers(headers)
 //                .body(new TokenDTO(UserRecord.of(

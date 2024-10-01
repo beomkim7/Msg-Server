@@ -43,7 +43,7 @@
     </update>
 
     <update id="changeName" parameterType="userDTO">
-        update user set name=#{name} where id=#{id}
+        update user set name=#{name},email=#{email} where id=#{id}
     </update>
 
 </mapper>

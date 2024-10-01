@@ -39,7 +39,6 @@ public class UserLoginService implements UserDetailsService {
             Optional<UserDTO> optional = userMapper.login(id);
             UserDTO userDTO = optional
                     .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + id));
-            System.out.println(userDTO+"dto 저장");
             return userDTO;
         } catch (UsernameNotFoundException e) {
             log.error("사용자를 찾을 수 없다: {}", e.getMessage());

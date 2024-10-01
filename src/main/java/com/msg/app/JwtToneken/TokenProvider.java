@@ -104,7 +104,8 @@ public class TokenProvider implements InitializingBean {
         String name = claims.get("name", String.class);
         String email = claims.get("email", String.class);
         UserDTO principal = new UserDTO(subject, "", name, email, true, null, null);
-
+        logger.info("{}+저장확인", principal);
+        
         // UsernamePasswordAuthenticationToken 반환
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
