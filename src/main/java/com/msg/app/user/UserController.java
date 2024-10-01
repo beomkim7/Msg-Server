@@ -32,7 +32,7 @@ public class UserController {
     @Autowired
     private UserLoginService userLoginService;
 
-    @PostMapping("/join")
+    @PostMapping("/users")
     public ResponseEntity<UserDTO> join(@RequestBody com.msg.app.user.DTO.UserDTO userDTO)throws Exception {
         int result = userService.addUser(userDTO);
         return ResponseEntity.ok(result == 1 ? userDTO : null);
@@ -42,10 +42,21 @@ public class UserController {
     public ResponseEntity<Integer> update(@AuthenticationPrincipal UserDTO user, @RequestBody UserDTO userDTO)throws Exception {
         System.out.println(SecurityContextHolder.getContext().getAuthentication());
         logger.info(user+"김범서");
-
+        logger.info(userDTO+"김범서");
         if(user == null) {
             throw new Exception("로그인이 필요합니다.");
         }
+
+        if(userDTO.getName()==null) userDTO.setName(user.getName());
+        if(userDTO.getEmail()==null) userDTO.setEmail(user.getEmail());
+
+        user = UserDTO.of(user.getId(),userDTO.getName(), userDTO.getEmail());
+
+        //정보변경후 principal 객체 정보 업데이트
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
         userDTO.setId(user.getId());
         int result = userService.changeName(userDTO);
 
