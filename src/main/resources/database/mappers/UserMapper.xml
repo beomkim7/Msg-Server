@@ -46,4 +46,8 @@
         update user set name=#{name},email=#{email} where id=#{id}
     </update>
 
+    <select id="checkEmail" parameterType="userDTO">
+        select count(email) from user where email = #{email}
+    </select>
+
 </mapper>
