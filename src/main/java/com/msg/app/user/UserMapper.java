@@ -13,6 +13,7 @@ public interface UserMapper {
     public Optional<UserDTO> login(String id)throws Exception;
     public int addUser(UserDTO user)throws Exception;
     public int changeName(UserDTO user)throws Exception;
+    public int checkEmail(String email)throws Exception;
 
 
 //    //DB에 있는 암호화되지 않은 비밀번호 암호화

@@ -22,6 +22,18 @@ public class UserService {
         return userMapper.changeName(userDTO);
     }
 
+    public boolean emailValidate(String email) {
+        String check = "^\\w([-_.]?\\w)*@\\w([-_.]?\\w)*.[a-zA-Z]+$";
+
+        return email.matches(check);
+    }
+
+    public int checkEmail(String email)throws Exception {
+        int result = userMapper.checkEmail(email);
+        if(result >1) throw new Exception("이미 등록된 이메일");
+        return result;
+    }
+
 //    //DB 비밀번호 인코딩안됐을때 로직
 //    public int updatePassword(UserDTO userDTO) throws Exception {
 //        UserDTO existingUser = userMapper.findUserById(userDTO.getId());

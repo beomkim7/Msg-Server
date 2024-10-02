@@ -38,6 +38,16 @@ public class UserController {
         return ResponseEntity.ok(result == 1 ? userDTO : null);
     }
 
+    @GetMapping("/users/email/{email}")
+    public ResponseEntity<Integer> checkEmail(@PathVariable String email)throws Exception {
+
+        if(!userService.emailValidate(email)){
+            throw new Exception("이메일 형식이 맞지 않습니다.");
+        }
+        int result = userService.checkEmail(email);
+        return ResponseEntity.ok(result);
+    }
+
     @PutMapping("/users")
     public ResponseEntity<Integer> update(@AuthenticationPrincipal UserDTO user, @RequestBody UserDTO userDTO)throws Exception {
         System.out.println(SecurityContextHolder.getContext().getAuthentication());
@@ -61,6 +71,13 @@ public class UserController {
         int result = userService.changeName(userDTO);
 
         return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/logout")
+    public ResponseEntity<?> logout(@AuthenticationPrincipal UserDTO userDTO)throws Exception {
+
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
