@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -125,5 +126,15 @@ public class TokenProvider implements InitializingBean {
             logger.error("JWT 토큰이 잘못되었습니다.", e);
         }
         return false;
+    }
+
+    public ResponseCookie cookie(String token) {
+        return ResponseCookie.from("token",token)
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(60*60*24*7)
+                .sameSite("None")
+                .path("/")
+                .build();
     }
 }

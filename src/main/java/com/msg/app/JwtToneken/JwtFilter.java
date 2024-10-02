@@ -1,7 +1,9 @@
 package com.msg.app.JwtToneken;
 
+import com.msg.app.user.UserService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -19,7 +21,7 @@ public class JwtFilter extends GenericFilterBean {
     private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
     public static  final String AUTHORIZATION_HEADER = "Authorization";
     private  final TokenProvider tokenProvider;
-
+    private UserService userService;
     //실제 필터링 로직
     //토큰의 인증정보 SecurityContext에 저장하는 역활
 
@@ -29,6 +31,11 @@ public class JwtFilter extends GenericFilterBean {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String jwt = resolveToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
+
+        if(jwt != null && userService.addBlackList(jwt)){
+            ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN,"로그아웃자");
+            return;
+        }
 
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
             Authentication authentication = tokenProvider.getauAuthentication(jwt);

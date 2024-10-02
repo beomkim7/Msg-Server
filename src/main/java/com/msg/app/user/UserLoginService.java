@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,9 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Component("userDetailsService")
@@ -26,7 +27,8 @@ public class UserLoginService implements UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(UserLoginService.class);
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
+
+
 
 //    public UserLoginService(final UserMapper userMapper, final PasswordEncoder passwordEncoder) {
 //        this.userMapper = userMapper;
@@ -64,5 +66,10 @@ public class UserLoginService implements UserDetailsService {
 //
 //        return new User(userDTO.getId(), userDTO.getPw(), authorities); // 비밀번호 암호화 고려 필요
 //    }
+    public void logout(String token) {
+
+
+    }
+
 
 }

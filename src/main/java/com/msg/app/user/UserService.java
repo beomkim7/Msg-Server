@@ -6,12 +6,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final Set<String> black = new HashSet<>();
+
+    public void addBlack(String token){
+        if(token != null){
+            black.add(token);
+        }
+    }
+
+    public boolean addBlackList(String token){
+        return black.contains(token);
+    }
+
 
     public int addUser(UserDTO userDTO) throws Exception {
         userDTO.setPw(passwordEncoder.encode(userDTO.getPw()));

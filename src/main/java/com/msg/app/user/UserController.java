@@ -50,9 +50,8 @@ public class UserController {
 
     @PutMapping("/users")
     public ResponseEntity<Integer> update(@AuthenticationPrincipal UserDTO user, @RequestBody UserDTO userDTO)throws Exception {
-        System.out.println(SecurityContextHolder.getContext().getAuthentication());
-        logger.info(user+"김범서");
-        logger.info(userDTO+"김범서");
+
+        System.out.println(user);
         if(user == null) {
             throw new Exception("로그인이 필요합니다.");
         }
@@ -73,10 +72,19 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("/logout")
-    public ResponseEntity<?> logout(@AuthenticationPrincipal UserDTO userDTO)throws Exception {
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@AuthenticationPrincipal UserDTO userDTO,@CookieValue(name = "token",required = false) String token)throws Exception {
+        if(userDTO == null && token == null)throw new Exception("로그인이 되어있지 않음");
+        userService.addBlack(token);
 
+        HttpHeaders headers = new HttpHeaders();
+        if(token != null) {
+            headers.add(HttpHeaders.SET_COOKIE, "token=; Max-Age=0; Path=/; HttpOnly");
+        }
 
+        SecurityContextHolder.clearContext();
+
+        System.out.println(userDTO+"로그아웃되야돼");
         return ResponseEntity.ok().build();
     }
 
@@ -95,22 +103,17 @@ public class UserController {
         // authentication 객체를 createToken 메서드를 통해서 JWT Token을 생성
         String token = tokenProvider.createToken(authentication);
 
-        // reponse header에 jwt토큰을 넣어줌
         HttpHeaders headers = new HttpHeaders();
-//        headers.add("Authorization", "Bearer " + token);
-        headers.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token);
+        headers.add(HttpHeaders.SET_COOKIE,tokenProvider.cookie(token).toString());
+
         //tokendto를 이용해 response body에도 넣어서 리턴
-        return new ResponseEntity<>(new TokenDTO(token), headers, HttpStatus.OK);
+//        return new ResponseEntity<>(new TokenDTO(token), headers, HttpStatus.OK);
 //          @AuthenticationPrincipal에 담길 정보는 토큰이 생성될때 해야된다 
 //          오늘 뻘짓 너무많이했네 TokenProvider 확인
-//        return ResponseEntity.ok()
-//                .headers(headers)
-//                .body(new TokenDTO(UserRecord.of(
-//                        authenticatedUserDTO.getId(),
-//                        authenticatedUserDTO.getName(),
-//                        authenticatedUserDTO.getEmail()
-//                ),token
-//                ));
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(new TokenDTO(token)
+                );
     }
 
 //    //DB 비밀번호 인코딩안됐을때 로직
