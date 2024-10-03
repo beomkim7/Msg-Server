@@ -3,6 +3,7 @@ package com.msg.app.config;
 
 import com.msg.app.JwtToneken.JwtAccessDeniedHandler;
 import com.msg.app.JwtToneken.JwtAuthenticationEntryPoint;
+import com.msg.app.JwtToneken.JwtFilter;
 import com.msg.app.JwtToneken.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -52,10 +54,13 @@ public class SequrityConfig {
                         )
                 .sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                )
+        .addFilterBefore(
+                new JwtFilter(tokenProvider),
+                UsernamePasswordAuthenticationFilter.class
+        );
 
-
-        new JwtSecurityConfig(tokenProvider).configure(http);
+//        new JwtSecurityConfig(tokenProvider).configure(http);
 
 
 

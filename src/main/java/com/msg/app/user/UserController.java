@@ -75,9 +75,8 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@AuthenticationPrincipal UserDTO userDTO,@CookieValue(name = "token",required = false) String token)throws Exception {
 
-        userService.addBlack(token);
-
         if(userDTO == null && userService.addBlackList(token))throw new Exception("로그인이 되어있지 않음");
+        userService.addBlack(token);
         HttpHeaders headers = new HttpHeaders();
         if(token != null) {
             headers.add(HttpHeaders.SET_COOKIE, "token=; Max-Age=0; Path=/; HttpOnly");
