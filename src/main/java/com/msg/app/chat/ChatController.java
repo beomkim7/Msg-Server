@@ -5,6 +5,7 @@ import com.msg.app.chat.DTO.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -16,7 +17,14 @@ public class ChatController {
     private final SimpMessagingTemplate template;
 
     @MessageMapping("/chat")
-    public void sendMsg(ChatDTO chatDTO){
+    @SendTo("pub/messages")
+    public void sendMsg(ChatDTO chatDTO)throws Exception{
         log.info("{}",chatDTO);
+
+        template.convertAndSend("/pub/messages", chatDTO);
+        int result = chatService.msgAdd(chatDTO);
+        if(result == 0){
+
+        }
     }
 }

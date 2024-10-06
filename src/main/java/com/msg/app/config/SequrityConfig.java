@@ -46,7 +46,7 @@ public class SequrityConfig {
 //                        .requestMatchers("/api/login").permitAll() //로그인
 //                        .requestMatchers("/api/join").permitAll() //회원가입
                         .requestMatchers("/api/**").permitAll() //api 밑에 모든경로 허용 익셉션 적용
-                                .requestMatchers("/ws","/sub","/pub").permitAll()
+                                .requestMatchers("/ws/**","/sub/**","/pub/**").permitAll()
                 )
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling.accessDeniedHandler(jwtAccessDeniedHandler)

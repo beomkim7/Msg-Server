@@ -13,7 +13,8 @@ public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws","/app")
-                .setAllowedOrigins("*");
+                .setAllowedOrigins("http://127.0.0.1:5501")
+                .withSockJS();
         //.withSockJS();
     }
 

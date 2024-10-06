@@ -9,11 +9,11 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.msg.app.chat.ChatMapper">
     <select id="getMsg" parameterType="chatDTO">
-        select * from chatDTO
+        select * from chat
     </select>
 
     <insert id="addMsg" parameterType="chatDTO">
-        insert into chatDTO
+        insert into chat(id,name,content)
         values(#{id},#{name},#{content})
     </insert>
 </mapper>
