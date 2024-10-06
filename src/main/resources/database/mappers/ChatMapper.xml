@@ -11,4 +11,9 @@
     <select id="getMsg" parameterType="chatDTO">
         select * from chatDTO
     </select>
+
+    <insert id="addMsg" parameterType="chatDTO">
+        insert into chatDTO
+        values(#{id},#{name},#{content})
+    </insert>
 </mapper>
