@@ -66,10 +66,7 @@ public class UserLoginService implements UserDetailsService {
 //
 //        return new User(userDTO.getId(), userDTO.getPw(), authorities); // 비밀번호 암호화 고려 필요
 //    }
-    public void logout(String token) {
 
-
-    }
 
 
 }

@@ -1,5 +1,5 @@
 package com.msg.app.chat;
 
 
-public class chatController {
+public class ChatController {
 }
