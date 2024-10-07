@@ -17,11 +17,11 @@ public class ChatController {
     private final SimpMessagingTemplate template;
 
     @MessageMapping("/chat")
-    @SendTo("pub/messages")
+    @SendTo("sub/messages")
     public void sendMsg(ChatDTO chatDTO)throws Exception{
         log.info("{}",chatDTO);
 
-        template.convertAndSend("/pub/messages", chatDTO);
+        template.convertAndSend("/sub/messages", chatDTO);
         int result = chatService.msgAdd(chatDTO);
         if(result == 0){
 
